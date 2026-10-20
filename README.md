@@ -16,8 +16,7 @@ Hittills har dina program körts en gång när sidan laddas. Nu får de **lyssna
 2. **Klona din fork:** *Code → HTTPS → kopiera adressen*. I terminalen (Ctrl+ö i VS Code): `git clone <adressen>`. Öppna den nya mappen i VS Code och starta *Live Server*.
 3. **Gör uppgiften.** Spara och kontrollera i webbläsaren och Console (F12) efter varje steg. Gör en commit efter varje avslutat steg: `git add .` och `git commit -m "Beskriv vad du gjorde"`.
 4. **Skicka upp** när du är klar: `git push`.
-5. **Fortsätt i `mitt-projekt`** med dagens projektsteg (längre ned).
-6. **Lämna in i Microsoft Forms.**
+5. **Lämna in i Microsoft Forms.**
 
 Fastnar du: skriv ner exakt var och vad du försökt (och vilket felmeddelande du fick), och ta det först i nästa handledda pass.
 
@@ -61,38 +60,6 @@ Skriv `visaFel` (skapar `p.falt-fel`, sätter `aria-invalid` och `aria-described
 
 Öppna `kontakt.html`. Testa: skicka tomt, fyll i felaktig e-post, rätta, skicka giltigt. Testa sedan *enbart med tangentbordet*, och slå på en skärmläsare (NVDA på Windows) i två minuter och lyssna på ett felmeddelande. Skriv i en kommentar vad du hörde.
 
-## AI-spåret (nivå 2: Specificera och jämför)
-
-**Specificera en funktion** (cirka 25 minuter, efter att du gjort din egen lösning)
-
-Du beskriver exakt vad koden ska göra och skriver testerna. AI föreslår kod, du kör testerna, jämför och förstår. Att beskriva exakt vad som ska hända är en av de viktigaste färdigheterna när AI skriver koden.
-
-Regler: egen lösning först, du ska kunna förklara varje rad, och du loggar i `docs/ai-logg.md` i `mitt-projekt` under rubriken *Modul 5*. Reglerna står i `AI-REGLER-MODUL5.md`.
-
-1. Skriv en specifikation för din filterfunktion: indata, utdata och tre hörnfall.
-2. Skriv testerna utifrån specifikationen innan du ber om kod.
-3. Be AI skriva funktionen med prompten nedan.
-4. Kör dina tester. Misslyckas något: ändra specifikationen, inte bara koden.
-5. Jämför med din egen version. Vilken är enklast att förstå?
-
-Prompt att utgå från:
-
-```
-Skriv en JS-funktion enligt denna specifikation:
-[din specifikation]
-Använd inga bibliotek. Förklara varje rad med en
-kommentar. Här är mina tester som ska gå gröna:
-[klistra in testerna]
-```
-
-**Kontrollera med:**
-
-- Dina egna tester avgör, inte AI:s ord.
-- Läs varje rad. Finns något du inte förstår?
-- Testa i webbläsaren med Live Server.
-
-**I ditt projekt:** Skriv en specifikation och tester för ett filter i ditt projekt, låt AI föreslå koden och logga hur många försök det tog.
-
 ## Kontrollista: så vet du att du är klar
 
 - [ ] Alla tester på `tests.html` är gröna, utom eventuellt fördjupningen (order).
@@ -102,7 +69,6 @@ kommentar. Här är mina tester som ska gå gröna:
 - [ ] Felmeddelanden är text (inte bara färg) och kopplade med `aria-describedby`.
 - [ ] Du har testat både filter och formulär med bara tangentbordet.
 - [ ] Du har gjort minst sex commits.
-- [ ] Du har gjort AI-uppgiften och skrivit en post i `docs/ai-logg.md` i `mitt-projekt`.
 
 ## Tips om du fastnar
 
@@ -113,19 +79,6 @@ kommentar. Här är mina tester som ska gå gröna:
 - `form.elements.namn` hämtar fältet med `name="namn"`. `FormData` ger alla värden som text.
 - Lyssnare på element som byggts om försvinner. Därför lyssnar vi på föräldern som aldrig byggs om.
 
-## Ditt projekt: Interaktion och validering i ditt projekt
-
-Efter övningen jobbar du vidare i `mitt-projekt`, samma repo som i modul 4. Övningen här är träningsbanan, projektet är det som växer. Dagens steg står också i `PROJEKTSTEG-MODUL5.md` (som du kopierar till ditt projekt dag 1), under **Dag 5**.
-
-1. Skapa `js/events.js` och koppla minst två olika sorters interaktion i din sida (till exempel ett filter, en sökning eller en knapp som visar och döljer något), med event delegation där det passar.
-2. Skriv en ren funktion för din filtrering eller sökning, och minst tre tester.
-3. Skapa `js/validering.js` med minst två valideringsfunktioner för ditt formulär från modul 4, och minst fyra tester.
-4. Koppla formuläret: felmeddelanden vid `blur` och `submit`, `aria-invalid`, `aria-describedby`, och fokus till första felet.
-5. Testa allt med bara tangentbordet.
-6. Commit och push.
-
-**Klart när:** Minst tre olika interaktiva element fungerar, och formuläret validerar med tillgängliga felmeddelanden.
-
 ## Inlämning
 
 **Deadline: imorgon klockan 09.00.** Allt lämnas in i Microsoft Forms. Du behöver inte redovisa något muntligt.
@@ -133,8 +86,7 @@ Efter övningen jobbar du vidare i `mitt-projekt`, samma repo som i modul 4. Öv
 I formuläret fyller du i:
 
 1. Länk till din fork av det här repot.
-2. Länk till ditt `mitt-projekt`.
-3. Reflektion: Varför lyssnar vi på föräldern (event delegation) istället för på varje knapp? Och varför valideras formuläret både vid `blur` och vid `submit`?
+2. Reflektion: Varför lyssnar vi på föräldern (event delegation) istället för på varje knapp? Och varför valideras formuläret både vid `blur` och vid `submit`?
 
 ## Vill du mer? (frivilligt)
 
