@@ -1,5 +1,5 @@
 // Dag 5: Funktioner som kopplar händelser (events). Gör testerna gröna på tests.html.
-// Båda använder EVENT DELEGATION: EN lyssnare på föräldern, inte en per knapp.
+// Båda använder EVENT DELEGATION: EN lyssnare på parent, inte en per knapp.
 
 // 1. grupp är elementet som innehåller filterknapparna: <button data-filter="bakverk" aria-pressed="false">
 //    Vid klick på en knapp (eller något inuti den):

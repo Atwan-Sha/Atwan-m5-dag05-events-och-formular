@@ -64,7 +64,7 @@ Skriv `visaFel` (skapar `p.falt-fel`, sätter `aria-invalid` och `aria-described
 
 - [ ] Alla tester på `tests.html` är gröna, utom eventuellt fördjupningen (order).
 - [ ] Alla fem filterknappar fungerar, och `aria-pressed` följer den valda knappen.
-- [ ] Du använder event delegation, med en lyssnare på föräldern.
+- [ ] Du använder event delegation, med en lyssnare på parent.
 - [ ] `kontakt.html` visar felmeddelanden vid blur och submit, och fokus flyttas till första felet.
 - [ ] Felmeddelanden är text (inte bara färg) och kopplade med `aria-describedby`.
 - [ ] Du har testat både filter och formulär med bara tangentbordet.
@@ -77,7 +77,7 @@ Skriv `visaFel` (skapar `p.falt-fel`, sätter `aria-invalid` och `aria-described
 - `dataset.id` är alltid text. `Number(...)` gör om det till ett tal, annars matchar inte `===`.
 - Formuläret laddar om sidan? Du har glömt `handelse.preventDefault()` i submit-lyssnaren.
 - `form.elements.namn` hämtar fältet med `name="namn"`. `FormData` ger alla värden som text.
-- Lyssnare på element som byggts om försvinner. Därför lyssnar vi på föräldern som aldrig byggs om.
+- Lyssnare på element som byggts om försvinner. Därför lyssnar vi på parent som aldrig byggs om.
 
 ## Inlämning
 
@@ -86,7 +86,7 @@ Skriv `visaFel` (skapar `p.falt-fel`, sätter `aria-invalid` och `aria-described
 I formuläret fyller du i:
 
 1. Länk till din fork av det här repot.
-2. Reflektion: Varför lyssnar vi på föräldern (event delegation) istället för på varje knapp? Och varför valideras formuläret både vid `blur` och vid `submit`?
+2. Reflektion: Varför lyssnar vi på parent (event delegation) istället för på varje knapp? Och varför valideras formuläret både vid `blur` och vid `submit`?
 
 ## Vill du mer? (frivilligt)
 
