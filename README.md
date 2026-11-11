@@ -1,56 +1,75 @@
 # Dag 5 · Events och formulär
 
-*Modul 5, UI/UX & Frontendutveckling (JavaScript), Lexicon IT-Proffs*
+*Modul 5, UI/UX & Frontendutveckling (TypeScript), Lexicon IT-Proffs*
 
 ## Vad du ska göra idag
 
-Du får kaféets sida att **reagera på användaren**: en klickbar filtrering av menyn, en beställning som växer, och ett bokningsformulär som kontrollerar sig självt med tydliga, tillgängliga felmeddelanden. Logiken ligger i små funktioner som du testar, och själva kopplingen till sidan ligger i `main.js` och `kontakt.js`.
+Du får kaféets sida att **reagera på användaren**: en klickbar filtrering av menyn, en beställning som växer, och ett bokningsformulär som kontrollerar sig självt med tydliga, tillgängliga felmeddelanden. Logiken ligger i små funktioner som du testar, och själva kopplingen till sidan ligger i `src/main.ts` och `src/kontakt.ts`.
 
 ## Bakgrund
 
 Hittills har dina program körts en gång när sidan laddas. Nu får de **lyssna**. En *händelse* (event) är något som sker: ett klick, en tangent, ett formulär som skickas. Du säger "när det här händer, kör den här funktionen". Det är sidans interaktivitet i ett nötskal. Idag lär du dig också att validera formulär så att användaren får hjälp på rätt sätt, vilket är något du har tränat på att tänka på sedan modul 2 och 3.
 
+## TypeScript idag: händelser, unioner och typade formulär
+
+- **Händelser:** `handelse.target` är av typen `EventTarget | null`. Kolla vad det är innan du använder det:
+
+```ts
+if (!(handelse.target instanceof HTMLElement)) {
+  return;
+}
+const knapp = handelse.target.closest<HTMLButtonElement>("button[data-filter]");
+```
+
+- **Union av texter:** `type Filter = "alla" | "vegetarisk" | Kategori`. Skriver du `filtreraMeny(meny, "pizza")` säger TypeScript ifrån direkt. I JavaScript får du bara en tom lista.
+- **Hjälpfunktionen `hamta("#id")`** (i `src/dom.ts`) ger elementet eller kastar ett tydligt fel, så du slipper kontrollera `null` överallt.
+- **Formulär:** `new FormData(form)` ger värden som är `string | File`. Kontrollera med `typeof varde === "string"` innan du lägger dem i ett `Record<string, string>`.
+- **`as`** (typpåstående) säger "jag vet bättre än TypeScript". Använd det sparsamt. TypeScript kontrollerar inte att du har rätt.
+
 ## Så arbetar du (samma som alltid)
 
 1. **Forka** dagens repo på GitHub (*Fork → Create fork*).
-2. **Klona din fork:** *Code → HTTPS → kopiera adressen*. I terminalen (Ctrl+ö i VS Code): `git clone <adressen>`. Öppna den nya mappen i VS Code och starta *Live Server*.
-3. **Gör uppgiften.** Spara och kontrollera i webbläsaren och Console (F12) efter varje steg. Gör en commit efter varje avslutat steg: `git add .` och `git commit -m "Beskriv vad du gjorde"`.
-4. **Skicka upp** när du är klar: `git push`.
-5. **Lämna in i Microsoft Forms.**
+2. **Klona din fork:** *Code → HTTPS → kopiera adressen*. I terminalen (Ctrl+ö i VS Code): `git clone <adressen>`. Öppna den nya mappen i VS Code.
+3. **Installera verktygen, en gång per repo:** `npm install` i terminalen.
+4. **Starta servern:** `npm run dev`. Öppna adressen den skriver ut (oftast `http://localhost:5173/`). Tryck F12 och välj fliken *Console*. Stoppa med Ctrl+C. Testsidan öppnar du på samma server: `http://localhost:5173/tests.html` (lägg till `/tests.html` efter adressen).
+5. **Gör uppgiften.** Spara och kontrollera i webbläsaren och Console efter varje steg. Gör en commit efter varje avslutat steg: `git add .` och `git commit -m "Beskriv vad du gjorde"`.
+6. **Kontrollera typerna:** `npm run typecheck`. Tyst betyder att alla typer stämmer. Röda understrykningar i VS Code är TypeScript som varnar.
+7. **Skicka upp** när du är klar: `git push`.
+8. **Lämna in i Microsoft Forms.**
 
-Fastnar du: skriv ner exakt var och vad du försökt (och vilket felmeddelande du fick), och ta det först i nästa handledda pass.
+Fastnar du: skriv ner exakt var och vad du försökt (och vilket felmeddelande du fick), och ta det först i nästa handledda pass. Problem med `npm` eller Node? Läs *Elevguide: Node, Vite och TypeScript*.
 
-Filer som använder `import` fungerar bara när sidan öppnas med *Live Server*. Dubbelklickar du på en HTML-fil hamnar du på `file://` och får ett CORS-fel i Console.
+> Vite tar bara bort typerna och kör koden. Den kontrollerar dem inte. Sidan kan alltså köras trots röda understrykningar.
 
 ## Uppgiften steg för steg
 
 ### Steg 1. Din första händelse
 
-Öppna `main.js`, del 1. Lägg en lyssnare på knappen i hero som skriver ut `handelse.type` och `handelse.target` i Console. Klicka, och titta. Prova sedan `handelse.preventDefault()` och se vad som händer med länken. Ta bort den igen.
+Öppna `src/main.ts`, del 1. Lägg en lyssnare på knappen i hero som skriver ut `handelse.type` och `handelse.target` i Console. Klicka, och titta. Prova sedan `handelse.preventDefault()` och se vad som händer med länken. Ta bort den igen.
 
 ### Steg 2. filtreraMeny
 
-Skriv den rena funktionen `filtreraMeny(meny, filter)` i `filter.js`. Filtret är `"alla"`, `"vegetarisk"` eller en kategori. Kör `tests.html`: fyra tester ska bli gröna.
+Skriv den rena funktionen `filtreraMeny(meny, filter)` i `src/filter.ts`. Filtret är `"alla"`, `"vegetarisk"` eller en kategori. Kör `tests.html`: fyra tester ska bli gröna.
 
 ### Steg 3. Event delegation: kopplaFilter
 
-I `events.js`: skriv `kopplaFilter`. En enda lyssnare på gruppen (inte en per knapp) som använder `handelse.target.closest(...)`. Den ska flytta `aria-pressed` och anropa en callback. Läs testerna: ett av dem klickar på en `span` *inuti* en knapp. Varför ska det fungera?
+I `src/events.ts`: skriv `kopplaFilter`. En enda lyssnare på gruppen (inte en per knapp) som använder `handelse.target.closest(...)`. Den ska flytta `aria-pressed` och anropa en callback. Läs testerna: ett av dem klickar på en `span` *inuti* en knapp. Varför ska det fungera?
 
 ### Steg 4. Koppla ihop menyn
 
-I `main.js`, del 2: skriv `uppdateraMeny(filter)` som filtrerar, visar kort, uppdaterar rubriken och markerar dagens rätt (billigaste lunchen, om det finns någon). Anropa den en gång direkt och koppla den till filterknapparna. Testa alla fem filter på sidan, och tryck på knapparna med *tangentbordet* (Tab och Enter).
+I `src/main.ts`, del 2: skriv `uppdateraMeny(filter)` som filtrerar, visar kort, uppdaterar rubriken och markerar dagens rätt (billigaste lunchen, om det finns någon). Anropa den en gång direkt och koppla den till filterknapparna. Testa alla fem filter på sidan, och tryck på knapparna med *tangentbordet* (Tab och Enter).
 
 ### Steg 5. Lägg-i-beställning-knappen
 
-I `ui.js`: lägg en `button` sist i varje kort i `skapaRattKort` (klass `lagg-i-order`, `data-id`, och ett `aria-label` som nämner rätten så att skärmläsare kan skilja knapparna åt). Skriv `kopplaLaggTill` i `events.js`.
+I `src/ui.ts`: lägg en `button` sist i varje kort i `skapaRattKort` (klass `lagg-i-order`, `data-id`, och ett `aria-label` som nämner rätten så att skärmläsare kan skilja knapparna åt). Skriv `kopplaLaggTill` i `src/events.ts`.
 
 ### Steg 6. Fördjupning: beställningen
 
-Skriv `laggTillIOrder`, `rensaOrder` och `antalIOrder` i `order.js` (nya arrayer, ändra aldrig originalet) och `visaOrder` i `ui.js`. Koppla ihop dem i `main.js`, del 3. Det här steget är fördjupning, så hoppa över det om tiden tar slut. Gör då steg 7 och 8 först.
+Skriv `laggTillIOrder`, `rensaOrder` och `antalIOrder` i `src/order.ts` (nya arrayer, ändra aldrig originalet) och `visaOrder` i `src/ui.ts`. Koppla ihop dem i `src/main.ts`, del 3. Det här steget är fördjupning, så hoppa över det om tiden tar slut. Gör då steg 7 och 8 först.
 
 ### Steg 7. Valideringsfunktionerna
 
-I `validering.js`: skriv `valideraNamn`, `valideraEpost`, `valideraTelefon`, `valideraDatum`, `valideraAntal` och `valideraFormular`. De är rena funktioner som returnerar ett meddelande eller en tom text. Meddelandena står i testerna, och du ska följa dem ordagrant.
+I `src/validering.ts`: skriv `valideraNamn`, `valideraEpost`, `valideraTelefon`, `valideraDatum`, `valideraAntal` och `valideraFormular`. De är rena funktioner som returnerar ett meddelande eller en tom text. Meddelandena står i testerna, och du ska följa dem ordagrant.
 
 ### Steg 8. Koppla formuläret i kontakt.js
 
@@ -86,7 +105,7 @@ Skriv `visaFel` (skapar `p.falt-fel`, sätter `aria-invalid` och `aria-described
 I formuläret fyller du i:
 
 1. Länk till din fork av det här repot.
-2. Reflektion: Varför lyssnar vi på parent (event delegation) istället för på varje knapp? Och varför valideras formuläret både vid `blur` och vid `submit`?
+2. Reflektion: Varför lyssnar vi på parent (event delegation) istället för på varje knapp? Och varför valideras formuläret både vid `blur` och vid `submit`? Varför måste TypeScript veta vad `handelse.target` är innan du använder det, och hur löste du det?
 
 ## Vill du mer? (frivilligt)
 

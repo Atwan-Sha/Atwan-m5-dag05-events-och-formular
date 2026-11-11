@@ -1,14 +1,15 @@
 // Tester för dag 5. Ändra inte den här filen.
 // Testerna för order.js och visaOrder är fördjupning. Resten ska bli gröna.
-import { test, assertEqual, assertTrue, visaResultat } from "./testlib.js";
-import { meny } from "./data.js";
-import { filtreraMeny } from "./filter.js";
-import { laggTillIOrder, rensaOrder, antalIOrder } from "./order.js";
-import { kopplaFilter, kopplaLaggTill } from "./events.js";
-import { valideraNamn, valideraEpost, valideraTelefon, valideraDatum, valideraAntal, valideraFormular } from "./validering.js";
-import { skapaRattKort, visaOrder } from "./ui.js";
+import type { Ratt, Filter } from "./typer";
+import { test, assertEqual, assertTrue, visaResultat } from "./testlib";
+import { meny } from "./data";
+import { filtreraMeny } from "./filter";
+import { laggTillIOrder, rensaOrder, antalIOrder } from "./order";
+import { kopplaFilter, kopplaLaggTill } from "./events";
+import { valideraNamn, valideraEpost, valideraTelefon, valideraDatum, valideraAntal, valideraFormular } from "./validering";
+import { skapaRattKort, visaOrder } from "./ui";
 
-const liten = [
+const liten: Ratt[] = [
   { id: 1, namn: "Bulle", pris: 35, kategori: "bakverk", vegetarisk: true, bild: "images/bulle.svg", beskrivning: "Bakad." },
   { id: 2, namn: "Kaffe", pris: 32, kategori: "dryck", vegetarisk: true, bild: "images/kaffe.svg", beskrivning: "Lokalrostat." },
   { id: 3, namn: "Skinkmacka", pris: 62, kategori: "lunch", vegetarisk: false, bild: "images/smorgas.svg", beskrivning: "Skinka." },
@@ -26,10 +27,17 @@ test("filtreraMeny: kategori", () => {
   assertEqual(filtreraMeny(meny, "lunch").length, 3);
 });
 test("filtreraMeny: okänt filter ger tom lista", () => {
-  assertEqual(filtreraMeny(liten, "pizza"), []);
+  assertEqual(filtreraMeny(liten, "pizza" as Filter), []);
 });
 
 // ---- event delegation: kopplaFilter ----
+function klicka(rot: HTMLElement, valjare: string): void {
+  const element = rot.querySelector<HTMLElement>(valjare);
+  if (!element) {
+    throw new Error("Hittar inget element som matchar " + valjare);
+  }
+  element.click();
+}
 function byggFilter() {
   const grupp = document.createElement("div");
   grupp.innerHTML = '<button data-filter="alla" aria-pressed="true">Alla</button><button data-filter="dryck" aria-pressed="false"><span>Drycker</span></button><p>Text</p>';
@@ -37,51 +45,51 @@ function byggFilter() {
 }
 test("kopplaFilter: klick anropar callback med filtret", () => {
   const grupp = byggFilter();
-  const valda = [];
+  const valda: string[] = [];
   kopplaFilter(grupp, (f) => valda.push(f));
-  grupp.querySelector('[data-filter="dryck"]').click();
+  klicka(grupp, '[data-filter="dryck"]');
   assertEqual(valda, ["dryck"]);
 });
 test("kopplaFilter: aria-pressed flyttas till den klickade knappen", () => {
   const grupp = byggFilter();
   kopplaFilter(grupp, () => {});
-  grupp.querySelector('[data-filter="dryck"]').click();
-  assertEqual(grupp.querySelector('[data-filter="dryck"]').getAttribute("aria-pressed"), "true");
-  assertEqual(grupp.querySelector('[data-filter="alla"]').getAttribute("aria-pressed"), "false");
+  klicka(grupp, '[data-filter="dryck"]');
+  assertEqual(grupp.querySelector('[data-filter="dryck"]')?.getAttribute("aria-pressed"), "true");
+  assertEqual(grupp.querySelector('[data-filter="alla"]')?.getAttribute("aria-pressed"), "false");
 });
 test("kopplaFilter: klick inuti knappen (på span) fungerar också", () => {
   const grupp = byggFilter();
-  const valda = [];
+  const valda: string[] = [];
   kopplaFilter(grupp, (f) => valda.push(f));
-  grupp.querySelector("span").click();
+  klicka(grupp, "span");
   assertEqual(valda, ["dryck"]);
 });
 test("kopplaFilter: klick på annat i gruppen gör ingenting", () => {
   const grupp = byggFilter();
-  const valda = [];
+  const valda: string[] = [];
   kopplaFilter(grupp, (f) => valda.push(f));
-  grupp.querySelector("p").click();
+  klicka(grupp, "p");
   assertEqual(valda, []);
 });
 test("kopplaLaggTill: callback får id som tal", () => {
   const box = document.createElement("div");
   box.append(skapaRattKort(liten[1]));
-  const ider = [];
+  const ider: number[] = [];
   kopplaLaggTill(box, (id) => ider.push(id));
-  box.querySelector("button.lagg-i-order").click();
+  klicka(box, "button.lagg-i-order");
   assertEqual(ider, [2]);
 });
 
 // ---- skapaRattKort: knappen ----
 test("skapaRattKort: har en knapp .lagg-i-order med data-id", () => {
-  const knapp = skapaRattKort(liten[0]).querySelector("button.lagg-i-order");
+  const knapp = skapaRattKort(liten[0]).querySelector<HTMLButtonElement>("button.lagg-i-order");
   assertTrue(knapp !== null, "knappen saknas");
-  assertEqual(knapp.dataset.id, "1");
-  assertEqual(knapp.type, "button");
+  assertEqual(knapp?.dataset.id, "1");
+  assertEqual(knapp?.type, "button");
 });
 test("skapaRattKort: knappen har ett unikt tillgängligt namn (aria-label)", () => {
   const knapp = skapaRattKort(liten[0]).querySelector("button");
-  assertTrue(knapp.getAttribute("aria-label").includes("Bulle"), "aria-label ska nämna rätten");
+  assertTrue(knapp?.getAttribute("aria-label")?.includes("Bulle"), "aria-label ska nämna rätten");
 });
 
 // ---- validering ----

@@ -1,15 +1,28 @@
 // Dag 5: Bokningsformuläret. Kopplas på kontakt.html.
-import { valideraNamn, valideraEpost, valideraTelefon, valideraDatum, valideraAntal, valideraFormular, dagensDatum } from "./validering.js";
+import { valideraNamn, valideraEpost, valideraTelefon, valideraDatum, valideraAntal, valideraFormular, dagensDatum } from "./validering";
 
-const form = document.querySelector("#bokningsform");
-const bekraftelse = document.querySelector("#bekraftelse");
+import { hamta } from "./dom";
+
+type Falt = HTMLInputElement | HTMLSelectElement;
+
+const form = hamta<HTMLFormElement>("#bokningsform");
+const bekraftelse = hamta("#bekraftelse");
+
+// elements.namedItem ger Element | RadioNodeList | null. Vi kollar att det är ett fält vi känner igen.
+function hittaFalt(namn: string): Falt {
+  const falt = form.elements.namedItem(namn);
+  if (falt instanceof HTMLInputElement || falt instanceof HTMLSelectElement) {
+    return falt;
+  }
+  throw new Error(`Fältet ${namn} saknas i formuläret`);
+}
 
 // Vilken regel hör till vilket fält? Nyckeln är fältets name-attribut.
-const regler = {
+const regler: Record<string, (text: string) => string> = {
   namn: valideraNamn,
   epost: valideraEpost,
   telefon: valideraTelefon,
-  datum: (text) => valideraDatum(text, dagensDatum()),
+  datum: (text: string) => valideraDatum(text, dagensDatum()),
   antal: valideraAntal,
 };
 
@@ -18,7 +31,7 @@ const regler = {
 //    - p.textContent = meddelande
 //    - Är meddelandet tomt: ta bort aria-invalid och aria-describedby från fältet.
 //      Annars: falt.setAttribute("aria-invalid", "true") och aria-describedby = p:ts id.
-function visaFel(falt, meddelande) {
+function visaFel(falt: Falt, meddelande: string): void {
   // TODO
 }
 
@@ -29,5 +42,7 @@ function visaFel(falt, meddelande) {
 // 3. Vid "submit": preventDefault(). Validera hela formuläret med valideraFormular.
 //    - Finns fel: visa dem alla med visaFel, flytta fokus till första felaktiga fältet.
 //    - Annars: skriv "Tack! Vi bekräftar din bokning inom ett dygn." i #bekraftelse och töm formuläret (form.reset()).
-//    Tips: new FormData(form) och Object.fromEntries(...) ger { namn, epost, ... }
+//    Tips: new FormData(form) ger fält av typen string | File. valideraFormular vill ha Record<string, string>,
+//    så loopa och ta bara värden där typeof varde === "string".
+//    Använd hittaFalt(namn) för att hämta ett fält med rätt typ.
 // TODO

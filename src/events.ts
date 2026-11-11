@@ -1,4 +1,5 @@
 // Dag 5: Funktioner som kopplar händelser (events). Gör testerna gröna på tests.html.
+import type { Filter } from "./typer";
 // Båda använder EVENT DELEGATION: EN lyssnare på parent, inte en per knapp.
 
 // 1. grupp är elementet som innehåller filterknapparna: <button data-filter="bakverk" aria-pressed="false">
@@ -7,13 +8,13 @@
 //      - anropa vidVal(knappens data-filter)
 //    Klick på något annat i gruppen ska inte göra något.
 //    Tips: handelse.target.closest('button[data-filter]')
-export function kopplaFilter(grupp, vidVal) {
+export function kopplaFilter(grupp: HTMLElement, vidVal: (filter: Filter) => void): void {
   // TODO
 }
 
 // 2. container innehåller kort med knappar: <button class="lagg-i-order" data-id="3">
 //    Vid klick på en sådan knapp: anropa vidLaggTill(id) där id är ett TAL (dataset ger text!).
 //    Klick på något annat ska inte göra något.
-export function kopplaLaggTill(container, vidLaggTill) {
+export function kopplaLaggTill(container: HTMLElement, vidLaggTill: (id: number) => void): void {
   // TODO
 }
