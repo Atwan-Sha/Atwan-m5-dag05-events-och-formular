@@ -44,7 +44,7 @@ kopplaFilter(filterGrupp, uppdateraMeny)
 // 5. let order: OrderRad[] = []; Koppla kopplaLaggTill(menyLista, ...) så att klick lägger till i order och visar den
 //    med visaOrder. Koppla knappen #rensa-order till rensaOrder.
 const orderRef = {
-	menyLista: hamta('#order-menyLista'),
+	lista: hamta('#order-lista'),
 	summa: hamta('#order-summa'),
 	tom: hamta('#order-tom'),
 };

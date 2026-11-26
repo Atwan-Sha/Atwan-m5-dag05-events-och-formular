@@ -12,8 +12,8 @@ export function kopplaFilter(
 	grupp: HTMLElement,
 	vidVal: (filter: Filter) => void,
 ): void {
-  //* elementet som klickas (span/button) bubblar upp till grupp-elementet (föräldern):
-  //* vilket gör att event delegation fungerar och man kan specificera vad som händer i event.target
+	//* elementet som klickas (span/button) bubblar upp till grupp-elementet (föräldern):
+	//* vilket gör att event delegation fungerar och man kan specificera vad som händer i event.target
 	grupp.addEventListener('click', (e) => {
 		if (!(e.target instanceof Element)) return;
 		const knapp = e.target.closest<HTMLButtonElement>('button[data-filter]');
@@ -34,5 +34,10 @@ export function kopplaLaggTill(
 	container: HTMLElement,
 	vidLaggTill: (id: number) => void,
 ): void {
-	// TODO
+	container.addEventListener('click', (e) => {
+		if (!(e.target instanceof Element)) return;
+		const knapp = e.target.closest<HTMLButtonElement>('button.lagg-i-order');
+		if (!knapp) return;
+		vidLaggTill(Number(knapp.dataset.id));
+	});
 }
