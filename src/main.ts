@@ -18,7 +18,7 @@ const filterGrupp = hamta('#filter');
 //    handelse.type och handelse.target i Console.
 // 2. Lägg till handelse.preventDefault() i lyssnaren. Vad händer med länken?
 //    Ta bort preventDefault igen när du provat.
-const knapp = hamta('.knapp');
+const knapp = hamta('#hero .knapp');
 knapp.addEventListener('click', (e) => console.log(e.type, e.target));
 //* preventDefault() avaktiverar länken (händer inget på sidan vid klick)
 
