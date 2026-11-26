@@ -9,8 +9,8 @@ import { laggTillIOrder, rensaOrder } from './order';
 import { hamta } from './dom';
 import type { Filter, OrderRad } from './typer';
 
-const lista = hamta('#meny-lista');
-const rubrik = hamta('#meny-rubrik');
+const menyLista = hamta('#meny-lista');
+const menyRubrik = hamta('#meny-rubrik');
 const filterGrupp = hamta('#filter');
 
 // DEL 1: din första händelse -------------------------------------------
@@ -26,13 +26,25 @@ knapp.addEventListener('click', (e) => console.log(e.type, e.target));
 // 3. Skriv funktionen uppdateraMeny(filter: Filter): void: hämta rätter med filtreraMeny, visa dem med visaMeny,
 //    uppdatera rubriken och markera den billigaste lunchen som dagens rätt (om det finns någon lunch).
 // 4. Anropa uppdateraMeny("alla") direkt, och koppla filterknapparna med kopplaFilter.
-// TODO
+function uppdateraMeny(filter: Filter): void {
+	const filtrerad = filtreraMeny(meny, filter);
+	visaMeny(menyLista, filtrerad);
+	uppdateraRubrik(menyRubrik, filtrerad.length);
+	const billigasteLunchen = billigast(
+		meny.filter((r) => r.kategori === 'lunch'),
+	);
+	if (menyLista && billigasteLunchen) {
+		markeraDagensRatt(menyLista, billigasteLunchen.id);
+	}
+}
+uppdateraMeny('alla');
+kopplaFilter(filterGrupp, uppdateraMeny)
 
 // DEL 3 (fördjupning): beställningen ---------------------------------------
-// 5. let order: OrderRad[] = []; Koppla kopplaLaggTill(lista, ...) så att klick lägger till i order och visar den
+// 5. let order: OrderRad[] = []; Koppla kopplaLaggTill(menyLista, ...) så att klick lägger till i order och visar den
 //    med visaOrder. Koppla knappen #rensa-order till rensaOrder.
 const orderRef = {
-	lista: hamta('#order-lista'),
+	menyLista: hamta('#order-menyLista'),
 	summa: hamta('#order-summa'),
 	tom: hamta('#order-tom'),
 };
