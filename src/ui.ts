@@ -31,6 +31,7 @@ export function skapaRattKort(ratt: Ratt): HTMLElement {
   // DAG 5, TODO: skapa en knapp och lägg den sist i kortet:
   //   <button type="button" class="lagg-i-order" data-id="1" aria-label="Lägg Kardemummabulle i beställningen">Lägg i beställning</button>
   const knapp = document.createElement('button');
+  knapp.type = 'button';
   knapp.className = 'lagg-i-order';
   knapp.dataset.id = String(ratt.id);
   knapp.textContent = 'Lägg till';
