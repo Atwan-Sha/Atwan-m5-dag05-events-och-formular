@@ -39,12 +39,17 @@ export function valideraTelefon(text: string): string {
 
 // Datum: obligatoriskt. text och idag är datum som "2026-10-19". Inte före idag.
 export function valideraDatum(text: string, idag: string): string {
-	// TODO
+	const datum = text.trim();
+	if (datum === '') return 'Välj ett datum.';
+	if (datum < idag) return 'Datumet kan inte vara i det förflutna.';
+	return '';
 }
 
 // Antal personer: obligatoriskt (en tom text betyder att inget valts).
 export function valideraAntal(text: string): string {
-	// TODO
+	const antal = text.trim();
+	if (antal === '') return 'Välj antal personer.';
+	return '';
 }
 
 // Dagens datum som "2026-10-19" (färdig, du behöver inte ändra den).
@@ -59,5 +64,22 @@ export function valideraFormular(
 	varden: Record<string, string>,
 	idag: string,
 ): Record<string, string> {
-	// TODO
+	const fel: Record<string, string> = {};
+
+	const namnFel = valideraNamn(varden.namn ?? '');
+	if (namnFel !== '') fel.namn = namnFel;
+
+	const epostFel = valideraEpost(varden.epost ?? '');
+	if (epostFel !== '') fel.epost = epostFel;
+
+	const telefonFel = valideraTelefon(varden.telefon ?? '');
+	if (telefonFel !== '') fel.telefon = telefonFel;
+
+	const datumFel = valideraDatum(varden.datum ?? '', idag);
+	if (datumFel !== '') fel.datum = datumFel;
+
+	const antalFel = valideraAntal(varden.antal ?? '');
+	if (antalFel !== '') fel.antal = antalFel;
+
+	return fel;
 }
